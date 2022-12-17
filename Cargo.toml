@@ -6,3 +6,7 @@ description = "A simple cross-platform library for retrieving information about 
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/hankjordan/devices"
+
+[dependencies]
+lazy_static = "1.4"
+regex = "1.7"

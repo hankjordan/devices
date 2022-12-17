@@ -5,10 +5,10 @@ A simple cross-platform library for retrieving information about connected devic
 ## Supported platforms
 
 - Linux (`lspci` and `lsusb` required)
-- Windows
+- ~~Windows~~ (WIP)
 
 ## Implementation Note
 
-This library works by creating a subprocess to gather device information and parsing the result.
+On Linux, this library works by creating a subprocess to gather device information and parsing the result.
 
 Pulling device information from a platform-specific API would be preferred. PRs welcome.
