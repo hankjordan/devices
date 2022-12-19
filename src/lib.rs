@@ -13,10 +13,10 @@ pub use error::Error;
 pub use info::DeviceInfo;
 pub use path::DevicePath;
 
-#[cfg(target_os = "linux")]
+#[cfg(unix)]
 mod linux;
 
-#[cfg(target_os = "windows")]
+#[cfg(windows)]
 mod win32;
 
 /// Information about system devices.
@@ -28,8 +28,10 @@ impl Devices {
     /// If the platform is unsupported or there is an issue retrieving the list of devices, an error is returned.
     pub fn get() -> Result<Vec<DeviceInfo>, Error> {
         cfg_if! {
-            if #[cfg(target_os = "linux")] {
+            if #[cfg(unix)] {
                 linux::get_devices()
+            } else if #[cfg(windows)] {
+                win32::get_devices()  
             } else {
                 Err(Error::UnsupportedPlatform)
             }

@@ -7,7 +7,7 @@ Combined with a library like [sysinfo](https://crates.io/crates/sysinfo), a more
 ## Supported platforms
 
 - Linux (`lspci` and `lsusb` required)
-- ~~Windows~~ (WIP)
+- Windows (Windows 7+ / Wine)
 
 ## Implementation Note
 
