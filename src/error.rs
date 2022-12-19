@@ -1,1 +1,6 @@
-pub(crate) struct Error;
+#[derive(Debug)]
+pub enum Error {
+    UnsupportedPlatform,
+    CommandError,
+    ParseError
+}

@@ -1,24 +1,38 @@
-use crate::info::DeviceInfo;
+#![warn(clippy::pedantic)]
+#![allow(clippy::module_name_repetitions)]
+#![allow(clippy::must_use_candidate)]
+#![allow(clippy::redundant_closure_for_method_calls)]
+#![doc = include_str!("../README.md")]
 
 mod error;
-pub mod info;
+mod info;
+mod path;
+
+use cfg_if::cfg_if;
+pub use error::Error;
+pub use info::DeviceInfo;
+pub use path::DevicePath;
+
+#[cfg(target_os = "linux")]
+mod linux;
 
 #[cfg(target_os = "windows")]
 mod win32;
 
-#[cfg(target_os = "linux")]
-mod linux;
-#[cfg(target_os = "linux")]
-use linux::*;
-
+/// Information about system devices.
 pub struct Devices;
 
 impl Devices {
-    pub fn get() -> Vec<DeviceInfo> {
-        let mut devices = Vec::new();
-
-        devices.extend(lspci().unwrap_or_default());
-
-        devices
+    /// Retrieve a list of all connected devices.
+    /// # Errors
+    /// If the platform is unsupported or there is an issue retrieving the list of devices, an error is returned.
+    pub fn get() -> Result<Vec<DeviceInfo>, Error> {
+        cfg_if! {
+            if #[cfg(target_os = "linux")] {
+                linux::get_devices()
+            } else {
+                Err(Error::UnsupportedPlatform)
+            }
+        }
     }
 }
