@@ -1,4 +1,5 @@
 #![warn(clippy::pedantic)]
+#![warn(missing_docs)]
 #![allow(clippy::module_name_repetitions)]
 #![allow(clippy::must_use_candidate)]
 #![allow(clippy::redundant_closure_for_method_calls)]
@@ -31,7 +32,7 @@ impl Devices {
             if #[cfg(unix)] {
                 linux::get_devices()
             } else if #[cfg(windows)] {
-                win32::get_devices()  
+                win32::get_devices()
             } else {
                 Err(Error::UnsupportedPlatform)
             }

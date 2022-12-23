@@ -1,9 +1,14 @@
 use devices::Devices;
 
 fn main() {
-    if let Ok(devices) = Devices::get() {
-        for device in devices {
-            println!("Device {:?}", device);
+    match Devices::get() {
+        Ok(devices) => {
+            for device in devices {
+                println!("{:?}", device);
+            }
+        }
+        Err(e) => {
+            println!("Devices::get() returned Error {:?}", e);
         }
     }
 }

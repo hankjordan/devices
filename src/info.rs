@@ -3,50 +3,27 @@ use crate::path::DevicePath;
 /// Device information. Use accessors to extract information about connected devices.
 #[derive(Debug)]
 pub struct DeviceInfo {
-    path: DevicePath,
+    pub(crate) path: DevicePath,
 
-    class: String,
-    vendor: String,
-    product: String,
-    manufacturer: Option<String>,
+    pub(crate) class: String,
+    pub(crate) vendor: String,
+    pub(crate) product: String,
+    pub(crate) manufacturer: Option<String>,
 
-    class_id: u16,
-    vendor_id: u16,
-    product_id: u16,
-    manufacturer_id: Option<u16>,
+    pub(crate) class_id: Option<u16>,
+    pub(crate) vendor_id: u16,
+    pub(crate) product_id: u16,
+    pub(crate) manufacturer_id: Option<u16>,
 }
 
 impl DeviceInfo {
-    #[allow(clippy::too_many_arguments)]
-    pub(crate) fn new(
-        path: DevicePath,
-        class: &str,
-        vendor: &str,
-        product: &str,
-        manufacturer: Option<&str>,
-        class_id: u16,
-        vendor_id: u16,
-        product_id: u16,
-        manufacturer_id: Option<u16>,
-    ) -> Self {
-        Self {
-            path,
-            class: class.to_owned(),
-            vendor: vendor.to_owned(),
-            product: product.to_owned(),
-            manufacturer: manufacturer.map(|s| s.to_owned()),
-            class_id,
-            vendor_id,
-            product_id,
-            manufacturer_id
-        }
-    }
-
     /// Returns the path where the device is mounted.
+    ///
+    /// Also known as `Location` on Windows.
     pub fn path(&self) -> &DevicePath {
         &self.path
     }
-    
+
     /// Returns the class name of the device.
     pub fn class(&self) -> &str {
         &self.class
@@ -70,7 +47,9 @@ impl DeviceInfo {
     }
 
     /// Returns the class id of the device.
-    pub fn class_id(&self) -> u16 {
+    /// # Note
+    /// Always returns `None` on Windows.
+    pub fn class_id(&self) -> Option<u16> {
         self.class_id
     }
 

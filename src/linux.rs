@@ -3,17 +3,21 @@ use std::process::Command;
 use lazy_static::lazy_static;
 use regex::Regex;
 
-use crate::{info::DeviceInfo, error::Error, path::DevicePath};
+use crate::{
+    error::Error,
+    info::DeviceInfo,
+    path::DevicePath,
+};
 
 lazy_static! {
     static ref LSPCI_REGEX: Regex = Regex::new("(^.*? )|(\".*?\")").unwrap();
-
     static ref LSUSB_PATH_REGEX: Regex = Regex::new("Bus [0-9]+ Device [0-9]+").unwrap();
     static ref LSUSB_CLASS_REGEX: Regex = Regex::new("\\s*?bDeviceClass\\s*?.*?\\n").unwrap();
     static ref LSUSB_VENDOR_REGEX: Regex = Regex::new("\\s*?idVendor\\s*?.*?\\n").unwrap();
     static ref LSUSB_PRODUCT_REGEX: Regex = Regex::new("\\s*?iProduct\\s*?.*?\\n").unwrap();
     static ref LSUSB_PRODUCT_ID_REGEX: Regex = Regex::new("\\s*?idProduct\\s*?.*?\\n").unwrap();
-    static ref LSUSB_MANUFACTURER_REGEX: Regex = Regex::new("\\s*?iManufacturer\\s*?.*?\\n").unwrap();
+    static ref LSUSB_MANUFACTURER_REGEX: Regex =
+        Regex::new("\\s*?iManufacturer\\s*?.*?\\n").unwrap();
 }
 
 trait RSplitAt {
@@ -33,8 +37,12 @@ fn id_from_raw(raw: &str) -> Result<u16, Error> {
 }
 
 pub(crate) fn lspci() -> Result<Vec<DeviceInfo>, Error> {
-    let output = Command::new("lspci").arg("-mm").arg("-nn").output().map_err(|_| Error::CommandError)?;
-    
+    let output = Command::new("lspci")
+        .arg("-mm")
+        .arg("-nn")
+        .output()
+        .map_err(|_| Error::CommandError)?;
+
     let output_str = String::from_utf8(output.stdout).map_err(|_| Error::ParseError)?;
 
     let mut devices = Vec::new();
@@ -64,27 +72,32 @@ pub(crate) fn lspci() -> Result<Vec<DeviceInfo>, Error> {
         let (product, product_id) = matches.get(3).ok_or(Error::ParseError)?.rsplit_at(7);
         let product_id = id_from_raw(product_id)?;
 
-        devices.push(
-            DeviceInfo::new(
-                DevicePath::PCI { bus, slot, function },
-                class,
-                vendor,
-                product,
-                None,
-                class_id,
-                vendor_id,
-                product_id,
-                None
-            )
-        );
+        devices.push(DeviceInfo {
+            path: DevicePath::PCI {
+                bus,
+                slot,
+                function,
+            },
+            class: class.to_owned(),
+            vendor: vendor.to_owned(),
+            product: product.to_owned(),
+            manufacturer: None,
+            class_id: Some(class_id),
+            vendor_id,
+            product_id,
+            manufacturer_id: None,
+        });
     }
-    
+
     Ok(devices)
 }
 
 pub(crate) fn lsusb() -> Result<Vec<DeviceInfo>, Error> {
-    let output = Command::new("lsusb").arg("-v").output().map_err(|_| Error::CommandError)?;
-    
+    let output = Command::new("lsusb")
+        .arg("-v")
+        .output()
+        .map_err(|_| Error::CommandError)?;
+
     let output_str = String::from_utf8(output.stdout).map_err(|_| Error::ParseError)?;
 
     let mut devices = Vec::new();
@@ -145,7 +158,7 @@ pub(crate) fn lsusb() -> Result<Vec<DeviceInfo>, Error> {
             .trim()
             .split_once(' ')
             .unwrap_or(("", ""));
-        
+
         let product_line_b = LSUSB_PRODUCT_ID_REGEX.find(dev).ok_or(Error::ParseError)?;
 
         let (product_id, product_b) = product_line_b
@@ -155,7 +168,7 @@ pub(crate) fn lsusb() -> Result<Vec<DeviceInfo>, Error> {
             .trim()
             .trim_start_matches("0x")
             .split_at(4);
-        
+
         let product_b = product_b.trim();
         let product_id = u16::from_str_radix(product_id, 16).map_err(|_| Error::ParseError)?;
 
@@ -164,7 +177,9 @@ pub(crate) fn lsusb() -> Result<Vec<DeviceInfo>, Error> {
 
         // Manufacturer
 
-        let manufacturer_line = LSUSB_MANUFACTURER_REGEX.find(dev).ok_or(Error::ParseError)?;
+        let manufacturer_line = LSUSB_MANUFACTURER_REGEX
+            .find(dev)
+            .ok_or(Error::ParseError)?;
 
         let manufacturer_result = manufacturer_line
             .as_str()
@@ -183,19 +198,17 @@ pub(crate) fn lsusb() -> Result<Vec<DeviceInfo>, Error> {
             manufacturer_id = Some(man_id);
         }
 
-        devices.push(
-            DeviceInfo::new(
-                DevicePath::USB { bus, device },
-                class,
-                vendor,
-                product,
-                manufacturer,
-                class_id,
-                vendor_id,
-                product_id,
-                manufacturer_id
-            )
-        );
+        devices.push(DeviceInfo {
+            path: DevicePath::USB { bus, device },
+            class: class.to_owned(),
+            vendor: vendor.to_owned(),
+            product: product.to_owned(),
+            manufacturer: manufacturer.map(|s| s.to_owned()),
+            class_id: Some(class_id),
+            vendor_id,
+            product_id,
+            manufacturer_id,
+        });
     }
 
     Ok(devices)
