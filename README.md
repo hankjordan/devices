@@ -1,4 +1,5 @@
-# Devices [![][img_crates]][crates] [![][img_doc]][doc]
+# Devices
+[![][img_version]][crates] [![][img_doc]][doc] [![][img_license]][license] [![][img_downloads]][crates]
 
 `devices` is a cross-platform library for retrieving information about connected devices.
 
@@ -15,8 +16,15 @@ Wine provides the APIs this library needs to function, but it does not return al
 
 On Linux, this library works by creating a subprocess to gather device information and parsing the result. Pulling device information from a platform-specific API would be preferred. PRs welcome.
 
-[img_crates]: https://img.shields.io/crates/v/devices.svg
+## License
+
+`devices` is dual-licensed under MIT and Apache-2.0.
+
+[img_version]: https://img.shields.io/crates/v/devices.svg
 [img_doc]: https://img.shields.io/badge/rust-documentation-blue.svg
+[img_license]: https://img.shields.io/badge/license-MIT%2FApache-blue.svg
+[img_downloads]:https://img.shields.io/crates/d/devices.svg
 
 [crates]: https://crates.io/crates/devices
 [doc]: https://docs.rs/devices/
+[license]: https://github.com/hankjordan/devices#license
