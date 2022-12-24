@@ -121,14 +121,14 @@ pub(crate) fn lsusb() -> Result<Vec<DeviceInfo>, Error> {
 
         let class_line = LSUSB_CLASS_REGEX.find(dev).ok_or(Error::ParseError)?;
 
-        let (class_id, class) = class_line
+        let class_line = class_line
             .as_str()
             .trim()
             .trim_start_matches("bDeviceClass")
             .trim()
-            .trim_start_matches("0x")
-            .split_once(' ')
-            .ok_or(Error::ParseError)?;
+            .trim_start_matches("0x");
+
+        let (class_id, class) = class_line.split_once(' ').unwrap_or((class_line, "Other"));
 
         let class_id = class_id.parse::<u16>().map_err(|_| Error::ParseError)?;
 
