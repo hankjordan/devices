@@ -1,6 +1,13 @@
+#[cfg(feature = "bincode")]
+use bincode::{
+    Decode,
+    Encode,
+};
+
 use crate::path::DevicePath;
 
 /// Device information. Use accessors to extract information about connected devices.
+#[cfg_attr(feature = "bincode", derive(Decode, Encode))]
 #[derive(Debug)]
 pub struct DeviceInfo {
     pub(crate) path: DevicePath,

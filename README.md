@@ -16,6 +16,10 @@ Wine provides the APIs this library needs to function, but it does not return al
 
 On Linux, this library works by creating a subprocess to gather device information and parsing the result. Pulling device information from a platform-specific API would be preferred. PRs welcome.
 
+## Cargo Features
+
+- `bincode`: Enables bincode v2 encoding and decoding of `DeviceInfo` and `DevicePath`.
+
 ## License
 
 `devices` is dual-licensed under MIT and Apache-2.0.
