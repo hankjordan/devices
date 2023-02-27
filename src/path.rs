@@ -6,7 +6,7 @@ use bincode::{
 
 /// Device mount path.
 #[cfg_attr(feature = "bincode", derive(Decode, Encode))]
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum DevicePath {
     /// A PCI device path.
     PCI {
