@@ -8,7 +8,7 @@ use crate::path::DevicePath;
 
 /// Device information. Use accessors to extract information about connected devices.
 #[cfg_attr(feature = "bincode", derive(Decode, Encode))]
-#[derive(Debug)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct DeviceInfo {
     pub(crate) path: DevicePath,
 
