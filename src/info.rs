@@ -1,6 +1,8 @@
 use crate::path::DevicePath;
 
-/// Device information. Use accessors to extract information about connected devices.
+/// Device information.
+/// 
+/// Use accessors to extract information about connected devices.
 #[cfg_attr(feature = "bincode", derive(bincode::Decode, bincode::Encode))]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]

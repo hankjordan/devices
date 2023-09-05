@@ -21,7 +21,9 @@ mod linux;
 mod win32;
 
 /// Information about system devices.
-pub struct Devices;
+pub struct Devices {
+    _marker: (),
+}
 
 impl Devices {
     /// Retrieve a list of all connected devices.
@@ -33,7 +35,7 @@ impl Devices {
 
         Ok(devices)
     }
-    
+
     /// Retrieve a list of all connected PCI devices.
     /// # Errors
     /// If the platform is unsupported or there is an issue retrieving the list of devices, an error is returned.

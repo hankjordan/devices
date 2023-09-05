@@ -9,6 +9,7 @@ use crate::{
     path::DevicePath,
 };
 
+#[rustfmt::skip]
 lazy_static! {
     static ref LSPCI_REGEX: Regex = Regex::new("(^.*? )|(\".*?\")").unwrap();
     static ref LSUSB_PATH_REGEX: Regex = Regex::new("Bus [0-9]+ Device [0-9]+").unwrap();
@@ -16,8 +17,7 @@ lazy_static! {
     static ref LSUSB_VENDOR_REGEX: Regex = Regex::new("\\s*?idVendor\\s*?.*?\\n").unwrap();
     static ref LSUSB_PRODUCT_REGEX: Regex = Regex::new("\\s*?iProduct\\s*?.*?\\n").unwrap();
     static ref LSUSB_PRODUCT_ID_REGEX: Regex = Regex::new("\\s*?idProduct\\s*?.*?\\n").unwrap();
-    static ref LSUSB_MANUFACTURER_REGEX: Regex =
-        Regex::new("\\s*?iManufacturer\\s*?.*?\\n").unwrap();
+    static ref LSUSB_MANUFACTURER_REGEX: Regex = Regex::new("\\s*?iManufacturer\\s*?.*?\\n").unwrap();
 }
 
 trait RSplitAt {

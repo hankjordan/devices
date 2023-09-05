@@ -18,7 +18,8 @@ On Linux, this library works by creating a subprocess to gather device informati
 
 ## Cargo Features
 
-- `bincode`: Enables bincode v2 encoding and decoding of `DeviceInfo` and `DevicePath`.
+- `bincode`: Support for bincode v2 encoding and decoding. Enabled by default.
+- `serde`: Support for serde serialization and deserialization. Enabled by default.
 
 ## License
 
