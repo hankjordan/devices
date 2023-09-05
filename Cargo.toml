@@ -8,8 +8,9 @@ readme = "README.md"
 repository = "https://github.com/hankjordan/devices"
 
 [features]
-default = ["bincode"]
+default = ["bincode", "serde"]
 bincode = ["dep:bincode"]
+serde = ["dep:serde"]
 
 [dependencies]
 cfg-if = "1.0"
@@ -18,3 +19,4 @@ regex = "1.7"
 widestring = "1.0"
 winapi = { version = "0.3", features = ["setupapi", "devpkey", "errhandlingapi"] }
 bincode = { version = "2.0.0-rc.2", features = ["derive"], optional = true }
+serde = { version = "1.0", features = ["derive"], optional = true }

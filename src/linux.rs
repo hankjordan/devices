@@ -36,7 +36,7 @@ fn id_from_raw(raw: &str) -> Result<u16, Error> {
     u16::from_str_radix(trimmed, 16).map_err(|_| Error::ParseError)
 }
 
-pub(crate) fn lspci() -> Result<Vec<DeviceInfo>, Error> {
+pub(crate) fn get_pci() -> Result<Vec<DeviceInfo>, Error> {
     let output = Command::new("lspci")
         .arg("-mm")
         .arg("-nn")
@@ -92,7 +92,7 @@ pub(crate) fn lspci() -> Result<Vec<DeviceInfo>, Error> {
     Ok(devices)
 }
 
-pub(crate) fn lsusb() -> Result<Vec<DeviceInfo>, Error> {
+pub(crate) fn get_usb() -> Result<Vec<DeviceInfo>, Error> {
     let output = Command::new("lsusb")
         .arg("-v")
         .output()
@@ -210,15 +210,6 @@ pub(crate) fn lsusb() -> Result<Vec<DeviceInfo>, Error> {
             manufacturer_id,
         });
     }
-
-    Ok(devices)
-}
-
-pub(crate) fn get_devices() -> Result<Vec<DeviceInfo>, Error> {
-    let mut devices = Vec::new();
-
-    devices.extend(lspci()?);
-    devices.extend(lsusb()?);
 
     Ok(devices)
 }

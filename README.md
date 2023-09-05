@@ -12,7 +12,7 @@ Combined with a library like [sysinfo](https://crates.io/crates/sysinfo), a more
 
 ## Implementation Notes
 
-Wine provides the APIs this library needs to function, but it does not return all the information necessary to build the `DeviceInfo` struct. When running on Wine, `Devices::get()` will return `Error::UnsupportedPlatform`.
+Wine provides the APIs this library needs to function, but it does not return all the information necessary to build the `DeviceInfo` struct. When running on Wine, all device-retrieving methods will return `Error::UnsupportedPlatform`.
 
 On Linux, this library works by creating a subprocess to gather device information and parsing the result. Pulling device information from a platform-specific API would be preferred. PRs welcome.
 

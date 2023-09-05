@@ -278,8 +278,7 @@ macro_rules! or_next {
     };
 }
 
-#[allow(clippy::pedantic)]
-pub(crate) fn get_devices() -> Result<Vec<DeviceInfo>, Error> {
+pub(crate) fn get_pci() -> Result<Vec<DeviceInfo>, Error> {
     let mut devices = Vec::new();
 
     // Return Error::UnsupportedPlatform for Wine
@@ -339,6 +338,23 @@ pub(crate) fn get_devices() -> Result<Vec<DeviceInfo>, Error> {
             manufacturer_id: None,
         });
     }
+
+    Ok(devices)
+}
+
+pub(crate) fn get_usb() -> Result<Vec<DeviceInfo>, Error> {
+    let mut devices = Vec::new();
+
+    // Return Error::UnsupportedPlatform for Wine
+    let mut devs = SetupDiClassDevs::build(DIGCF_ALLCLASSES)
+        .enumerator("WINEBUS")
+        .get();
+
+    if devs.next().is_some() {
+        return Err(Error::UnsupportedPlatform);
+    }
+
+    // Native Windows
 
     let devs = SetupDiClassDevs::build(DIGCF_ALLCLASSES)
         .enumerator("USB")

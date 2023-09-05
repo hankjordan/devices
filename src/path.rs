@@ -1,11 +1,6 @@
-#[cfg(feature = "bincode")]
-use bincode::{
-    Decode,
-    Encode,
-};
-
 /// Device mount path.
-#[cfg_attr(feature = "bincode", derive(Decode, Encode))]
+#[cfg_attr(feature = "bincode", derive(bincode::Decode, bincode::Encode))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum DevicePath {
     /// A PCI device path.
